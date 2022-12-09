@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -24,20 +24,43 @@
       </widget>
      </item>
      <item>
-      <widget class="QDateEdit" name="dateEdit">
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="readOnly">
-        <bool>false</bool>
-       </property>
-       <property name="currentSection">
-        <enum>QDateTimeEdit::DaySection</enum>
-       </property>
-       <property name="calendarPopup">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QDateEdit" name="dateEdit">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+         <property name="currentSection">
+          <enum>QDateTimeEdit::DaySection</enum>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>上午</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>下午</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>全天</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

@@ -18,10 +18,11 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-    void doQuery();
+    void query();
 
 private:
     QJsonObject post(const QString &data);
+    int doQuery(int post_meridiem);
     void say(const char *s);
 
 private:

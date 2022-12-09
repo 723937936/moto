@@ -9,7 +9,7 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     ui->dateEdit->setDate(QDate::currentDate());
     timer = new QTimer{this};
-    connect(timer, SIGNAL(timeout()), this, SLOT(doQuery()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(query()));
     tts = new QTextToSpeech{this};
 }
 
@@ -18,15 +18,37 @@ Widget::~Widget()
     delete ui;
 }
 
-void Widget::doQuery()
+void Widget::query()
+{
+    int index = ui->comboBox->currentIndex();
+    int result = 0;
+    switch (index) {
+    case 0:
+        result = doQuery(0);
+        break;
+    case 1:
+        result = doQuery(1);
+        break;
+    case 2:
+        result = doQuery(0)+doQuery(1);
+        break;
+    default:
+        break;
+    }
+
+    ui->remainingLabel->setText(QString::number(result));
+    ui->counterLabel->setText(QString::number(++counter));
+    if (result > 0)
+        say("有号啦");
+}
+
+int Widget::doQuery(int post_meridiem)
 {
     QString date = ui->dateEdit->date().toString("yyyy.MM.dd");
-    QJsonObject res = post(QString{"date="} + date);
-    int n = res.value("remaining_number").toInt();
-    ui->remainingLabel->setText(QString::number(n));
-    ui->counterLabel->setText(QString::number(++counter));
-    if (n > 0)
-        say("有号啦");
+    char data[100];
+    sprintf(data, "date=%s&post_meridiem=%d", date.toStdString().c_str(), post_meridiem);
+    QJsonObject res = post(data);
+    return res.value("remaining_number").toInt();
 }
 
 QJsonObject Widget::post(const QString &data)
@@ -53,19 +75,21 @@ QJsonObject Widget::post(const QString &data)
 
 void Widget::on_pushButton_clicked()
 {
+    ui->dateEdit->setEnabled(flag);
+    ui->comboBox->setEnabled(flag);
+
     if (!flag) {
         ui->pushButton->setText("停止查询");
         ui->remainingLabel->setText("0");
         counter = 0;
-        doQuery();
-        timer->start(5000);
+        query();
+        timer->start(10000);
     } else {
         ui->pushButton->setText("开始查询");
         timer->stop();
     }
 
     flag = !flag;
-    ui->dateEdit->setReadOnly(flag);
 }
 
 void Widget::say(const char *s)
